@@ -1,16 +1,13 @@
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue';
   import { useContextStore } from '../store';
-  import { injectTrackingIframe } from '../services';
+  import { injectTrackingScript } from '../services';
 
   const context = useContextStore();
   const uuid = ref('');
 
   onMounted(async () => {
-    const { uuid: storedUuid } = await injectTrackingIframe(
-      context.xSiteIframe,
-    );
-    uuid.value = storedUuid;
+    uuid.value = await injectTrackingScript(`${context.xSiteIframe}/script`);
   });
 </script>
 <template>
