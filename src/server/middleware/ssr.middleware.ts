@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express';
-import serialize from 'serialize-javascript';
+import stringify from 'json-stringify-safe';
 import nunjucks from 'nunjucks';
 import { diff } from 'deep-object-diff';
 
@@ -132,7 +132,7 @@ export const ssrMiddleware: RequestHandler = async (
     const page = nunjucks.render('index.njk', {
       head,
       html,
-      state: serialize(state),
+      state: stringify(state),
       context,
       manifest,
       criticalCss,

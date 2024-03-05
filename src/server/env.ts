@@ -12,7 +12,7 @@ const { npm_package_version: VERSION, ...requiredEnv } = required(
   'DEFAULT_LANGUAGE',
   'ACCEPTED_LANGUAGES',
   'ICON',
-  'X-SITE-IFRAME',
+  'XSITE_URL',
   'npm_package_version',
 );
 

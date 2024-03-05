@@ -1,5 +1,5 @@
 import { type ErrorRequestHandler } from 'express';
-import serialize from 'serialize-javascript';
+import stringify from 'json-stringify-safe';
 
 import type { AxiosError } from 'axios';
 import { getContext } from './context.middleware';
@@ -13,17 +13,19 @@ export const errorMiddleware: ErrorRequestHandler = (
 ) => {
   if (!error) return next();
 
-  const context = getContext();
-
-  if (context.isDebug) {
+  if (env.DEBUG === 'true') {
+    // return response.status(500).send('SHIT');
     return response.status(500).render('debug', {
       message: error.message,
-      details: serialize({
-        error: error.stack?.split('\n').map((line) => line.trim()),
-        env,
-        request,
-        context,
-      }),
+      details: stringify(
+        {
+          error: error.stack?.split('\n').map((line) => line.trim()),
+          env,
+          request,
+        },
+        undefined,
+        2,
+      ),
     });
   }
 

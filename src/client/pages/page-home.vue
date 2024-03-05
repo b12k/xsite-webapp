@@ -1,13 +1,25 @@
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue';
   import { useContextStore } from '../store';
-  import { injectTrackingScript } from '../services';
 
   const context = useContextStore();
   const uuid = ref('');
+  const href = ref('');
+
+  const handleLoopbackClick = () => {
+    window.location.href = href.value;
+  };
 
   onMounted(async () => {
-    uuid.value = await injectTrackingScript(`${context.xSiteIframe}/script`);
+    uuid.value = context.query.xsite as string;
+    href.value = `${context.xsiteUrl}/?to=${window.location}`;
+    window.addEventListener('beforeunload', () => {
+      document.body.classList.add(
+        'animate__animated',
+        'animate__fadeOut',
+        'animate__faster',
+      );
+    });
   });
 </script>
 <template>
@@ -16,5 +28,8 @@
   >
     <h1>{{ context.icon }}</h1>
     <p>Your ID: {{ uuid }}</p>
+    <button class="btn btn-primary" @click="handleLoopbackClick">
+      Track me
+    </button>
   </div>
 </template>
